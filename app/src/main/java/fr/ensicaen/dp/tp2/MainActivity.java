@@ -19,7 +19,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private ListView listView ;
-    private ArrayAdapter<String> listeTitresAdapter ;
     private List<Post> listeArticles ;
 
     @Override
@@ -27,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listView = (ListView) findViewById(R.id.liste) ;
-        listeTitresAdapter = new ArrayAdapter<> (this,android.R.layout.simple_list_item_1) ;
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -43,8 +42,18 @@ public class MainActivity extends AppCompatActivity {
 
         new DownloadTask().execute("http://jsonplaceholder.typicode.com/posts?userId=1") ;
     }
-    void affiche()
-    {}
+    void affiche(List<Post> liste)
+    {
+        listeArticles = liste ;
+        List<String> listeTitres = new ArrayList<> () ; ;
+
+        if (liste != null)
+        {
+            for (Post item : liste) listeTitres.add (item.getTitle ()) ;
+        }
+        ArrayAdapter<String> listeTitresAdapter = new ArrayAdapter<> (this,android.R.layout.simple_list_item_1,listeTitres) ;
+        listView.setAdapter(listeTitresAdapter);
+    }
 
 
         private class DownloadTask extends AsyncTask<String,Void,List<Post>> {
@@ -67,16 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(List<Post> liste) {
-                listeArticles = liste ;
-                List<String> listeTitres = new ArrayList<> () ; ;
-                super.onPostExecute(liste);
-
-                if (liste != null)
-                {
-                    for (Post item : liste) listeTitres.add (item.getTitle ()) ;
-                }
-                listeTitresAdapter.addAll(listeTitres);
-                listView.setAdapter(listeTitresAdapter);
+                affiche (liste) ;
             }
         }
 }
