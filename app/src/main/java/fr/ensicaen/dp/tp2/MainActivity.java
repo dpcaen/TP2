@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     }
     void affiche(List<Post> liste)
     {
-        listeArticles = liste ;
+        this.listeArticles = liste ;
         List<String> listeTitres = new ArrayList<> () ; ;
 
         if (liste != null)
